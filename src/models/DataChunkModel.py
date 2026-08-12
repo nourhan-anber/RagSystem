@@ -10,6 +10,24 @@ class ChunkModel(BaseDataModel):
     def __init__(self, db_client):
         super().__init__(db_client=db_client)
         self.collection = self.db_client[self.settings.MONGODB_DATABASE][DatabaseEnum.DATA_CHUNKS_COLLECTION.value]
+
+    @classmethod
+    async def create_instance(cls, db_client: object):
+        instance = cls(db_client=db_client)
+        await instance.init_collection()
+        return instance
+
+    async def init_collection(self):
+        all_collections = await self.db_client[self.settings.MONGODB_DATABASE].list_collection_names()
+        if DatabaseEnum.DATA_CHUNKS_COLLECTION.value not in all_collections:
+            self.collection = self.db_client[self.settings.MONGODB_DATABASE][DatabaseEnum.DATA_CHUNKS_COLLECTION.value]
+            indices = DataChunk.get_indices()
+            for index in indices:
+                await self.collection.create_index(
+                    index["key"], 
+                    name=index["name"], 
+                    unique=index["unique"]
+                    )
            
     async def create_chunk(self, chunk: Project):
         result = await self.collection.insert_one(chunk.dict(by_alias=True, exclude_unset=True))

@@ -8,7 +8,10 @@ from  models import ResponseSignal
 from models.ProjectModel import ProjectModel
 from models.DataChunkModel import ChunkModel
 from models.db_schemas.data_chunk import DataChunk
+from models.enums.AssetTypeEnum import AssetTypeEnum
 from .schemas.data import ProcessRequest
+from models.AssetModel import AssetModel
+from models.db_schemas.asset import Asset
 
 data_router = APIRouter(
     prefix = '/data',
@@ -18,7 +21,7 @@ data_router = APIRouter(
 @data_router.post("/upload/{project_id}")
 async def upload_file(request: Request, project_id : str, file: UploadFile, app_settings: Settings = Depends(get_settings)):
 
-    project_model = ProjectModel(
+    project_model = await ProjectModel.create_instance(
         db_client=request.app.mongodb_client
     )
     project = await project_model.get_project_or_create_one(
@@ -55,10 +58,23 @@ async def upload_file(request: Request, project_id : str, file: UploadFile, app_
             }
         )
 
+    asset_model = await AssetModel.create_instance(
+        db_client=request.app.mongodb_client
+    )
+    asset_resource = Asset(
+        asset_project_id=str(project.id),
+        asset_type=AssetTypeEnum.FILE.value,
+        asset_name=file_id,
+        asset_file_path=file_path,
+        asset_size=os.path.getsize(file_path),
+
+    )
+    asset_record = await asset_model.create_asset(asset=asset_resource)
+
     return JSONResponse(
             content={
                 "signal": ResponseSignal.FILE_UPLOAD_SUCCESS.value,
-                "file_id": file_id,
+                "file_id": str(asset_record.id),
             }
         )
 
@@ -67,7 +83,7 @@ async def process_file(request: Request, project_id: str, process_request: Proce
     file_id = process_request.file_id
     process_controller = ProcessController(project_id=project_id)
 
-    project_model = ProjectModel(
+    project_model = await ProjectModel.create_instance(
         db_client=request.app.mongodb_client
     )
     project = await project_model.get_project_or_create_one(project_id=project_id)
@@ -96,7 +112,7 @@ async def process_file(request: Request, project_id: str, process_request: Proce
         for i, chunk in enumerate(file_chunks)
     ]
 
-    chunk_model = ChunkModel(db_client=request.app.mongodb_client)
+    chunk_model = await ChunkModel.create_instance(db_client=request.app.mongodb_client)
 
     if process_request.do_reset == 1:
        _ = await chunk_model.delete_chunks_by_project_id(project_id=project.id)
