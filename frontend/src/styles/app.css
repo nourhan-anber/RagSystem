@@ -1,0 +1,751 @@
+:root {
+  --bg: #ffffff;
+  --bg-rail: #f0f4f9;
+  --surface: #f0f4f9;
+  --surface-hover: #e3e8ef;
+  --border: #dde3ea;
+  --text: #1f1f1f;
+  --text-muted: #5f6368;
+  --accent: #0b57d0;
+  --danger: #b3261e;
+  --danger-surface: #fce8e6;
+  --grad-a: #4285f4;
+  --grad-b: #9b72cb;
+  --grad-c: #d96570;
+  --radius-lg: 28px;
+  --radius-md: 16px;
+  --rail-width: 264px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1c1d;
+    --bg-rail: #282a2c;
+    --surface: #1e1f20;
+    --surface-hover: #333537;
+    --border: #444746;
+    --text: #e3e3e3;
+    --text-muted: #c4c7c5;
+    --accent: #a8c7fa;
+    --danger: #f2b8b5;
+    --danger-surface: #3b2422;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Google Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.app {
+  display: flex;
+  height: 100%;
+}
+
+/* ---------- sidebar ---------- */
+
+.sidebar {
+  width: var(--rail-width);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 10px;
+  background: var(--bg-rail);
+  transition: width 0.18s ease, transform 0.22s ease;
+  overflow: hidden;
+}
+
+.sidebar--collapsed {
+  width: 68px;
+}
+
+.sidebar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* The content stays mounted so the drawer is never empty after a resize;
+   collapsing on a wide screen only hides it. */
+.sidebar__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-height: 0;
+}
+
+.sidebar--collapsed .sidebar__body {
+  display: none;
+}
+
+/* Drawer-only affordances, switched on inside the narrow-viewport block. */
+.sidebar__dismiss,
+.scrim,
+.topbar__menu {
+  display: none;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  transition: background 0.15s ease;
+}
+
+.icon-button:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+
+.icon-button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.icon-button--filled {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.sidebar__toggle {
+  margin-bottom: 8px;
+}
+
+.sidebar__new {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  padding: 10px 18px 10px 14px;
+  border: none;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.sidebar__new:hover {
+  filter: brightness(0.96);
+}
+
+.sidebar__draft-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  outline: none;
+}
+
+.sidebar__label {
+  margin: 22px 0 4px 14px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.sidebar__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+.sidebar__item {
+  padding: 9px 14px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  text-align: left;
+  font-size: 14px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar__item:hover {
+  background: var(--surface-hover);
+}
+
+.sidebar__item--active {
+  background: #d3e3fd;
+  color: #041e49;
+}
+
+@media (prefers-color-scheme: dark) {
+  .sidebar__item--active {
+    background: #004a77;
+    color: #c2e7ff;
+  }
+}
+
+.sidebar__hint {
+  margin: 6px 14px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.sidebar__hint--error {
+  color: var(--danger);
+}
+
+/* ---------- main column ---------- */
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  font-size: 19px;
+  color: var(--text-muted);
+}
+
+.topbar__badge {
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.thread {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 24px;
+}
+
+.thread__inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 12px 0 24px;
+}
+
+/* ---------- empty state ---------- */
+
+.empty {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 12vh 0 0;
+}
+
+.empty__greeting {
+  margin: 0;
+  font-size: 54px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  background: linear-gradient(74deg, var(--grad-a) 0%, var(--grad-b) 45%, var(--grad-c) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.empty__sub {
+  margin: 6px 0 32px;
+  font-size: 30px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.empty__suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.suggestion {
+  max-width: 230px;
+  padding: 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  text-align: left;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.suggestion:hover {
+  background: var(--surface-hover);
+}
+
+/* ---------- turns ---------- */
+
+.turn {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.turn--user {
+  justify-content: flex-end;
+}
+
+.bubble {
+  max-width: 78%;
+  padding: 12px 20px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  white-space: pre-wrap;
+}
+
+.avatar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--grad-a), var(--grad-b), var(--grad-c));
+  color: #fff;
+}
+
+.avatar--busy {
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.turn__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.answer > :first-child {
+  margin-top: 0;
+}
+
+.answer > :last-child {
+  margin-bottom: 0;
+}
+
+.answer pre {
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--surface);
+  overflow-x: auto;
+}
+
+.answer code {
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 0.9em;
+}
+
+.answer table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.answer th,
+.answer td {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+.caret {
+  display: inline-block;
+  width: 8px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  border-radius: 2px;
+  background: var(--text);
+  animation: blink 1s steps(2, start) infinite;
+}
+
+.thinking {
+  display: flex;
+  gap: 6px;
+  padding-top: 8px;
+}
+
+.thinking span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  animation: bounce 1.2s ease-in-out infinite;
+}
+
+.thinking span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.thinking span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.answer-error {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--danger-surface);
+  color: var(--danger);
+  font-size: 14px;
+}
+
+.link-button {
+  border: none;
+  background: none;
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  padding: 0;
+}
+
+/* ---------- sources ---------- */
+
+.sources {
+  margin-top: 14px;
+}
+
+.sources__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.sources__toggle:hover {
+  background: var(--surface);
+}
+
+.sources__chevron {
+  transition: transform 0.15s ease;
+}
+
+.sources__chevron--open {
+  transform: rotate(180deg);
+}
+
+.sources__list {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sources__item {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.sources__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.sources__file {
+  font-weight: 600;
+}
+
+.sources__score {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.sources__text {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ---------- composer ---------- */
+
+.composer-dock {
+  padding: 8px 24px 20px;
+}
+
+.composer {
+  max-width: 760px;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+  transition: outline-color 0.15s ease;
+  outline: 2px dashed transparent;
+  outline-offset: 6px;
+}
+
+.composer--dragging {
+  outline-color: var(--accent);
+}
+
+.tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 10px;
+  padding: 0 4px;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  font-size: 13px;
+  max-width: 280px;
+}
+
+.chip__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chip__status {
+  color: var(--text-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.chip--uploading .chip__status {
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.chip--error {
+  border-color: var(--danger);
+  background: var(--danger-surface);
+  color: var(--danger);
+}
+
+.chip__action {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.chip__close {
+  display: inline-flex;
+  border: none;
+  background: none;
+  padding: 2px;
+  border-radius: 50%;
+  color: var(--text-muted);
+}
+
+.chip__close:hover {
+  background: var(--surface-hover);
+}
+
+.composer__bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.composer__input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  padding: 10px 4px;
+  resize: none;
+  outline: none;
+  max-height: 200px;
+}
+
+.composer__input::placeholder {
+  color: var(--text-muted);
+}
+
+.composer__note {
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ---------- animation ---------- */
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar--busy,
+  .caret,
+  .thinking span,
+  .chip--uploading .chip__status {
+    animation: none;
+  }
+}
+
+@media (max-width: 720px) {
+  /* Below this width the rail becomes an off-canvas drawer: a 68px strip of
+     clipped labels is worse than no rail at all. The collapsed modifier is
+     overridden here because collapsing is a wide-viewport idea. */
+  .sidebar,
+  .sidebar--collapsed {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 40;
+    width: min(280px, 82vw);
+    transform: translateX(-100%);
+  }
+
+  .sidebar--open {
+    transform: translateX(0);
+    box-shadow: 0 0 42px rgb(0 0 0 / 32%);
+  }
+
+  .sidebar--collapsed .sidebar__body {
+    display: flex;
+  }
+
+  .sidebar__toggle {
+    display: none;
+  }
+
+  .sidebar__dismiss,
+  .topbar__menu {
+    display: inline-flex;
+  }
+
+  .scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    background: rgb(0 0 0 / 42%);
+  }
+
+  .topbar {
+    padding: 8px 12px;
+    font-size: 17px;
+  }
+
+  .thread,
+  .composer-dock {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .bubble {
+    max-width: 88%;
+  }
+
+  .empty {
+    padding-top: 8vh;
+  }
+
+  .empty__greeting {
+    font-size: 40px;
+  }
+
+  .empty__sub {
+    font-size: 22px;
+  }
+
+  .empty__suggestions {
+    flex-direction: column;
+  }
+
+  .suggestion {
+    max-width: none;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar {
+    transition: none;
+  }
+}
