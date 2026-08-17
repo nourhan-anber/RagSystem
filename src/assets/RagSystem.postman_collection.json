@@ -1,0 +1,192 @@
+{
+  "info": {
+    "_postman_id": "43d8f5cd-69f1-42d3-a67c-51c8f58e0a42",
+    "name": "RagSystem",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "35066099"
+  },
+  "item": [
+    {
+      "name": "upload",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "uuid": "3cb7d3d9-9507-49e9-9734-2ac4642a022c",
+              "src": "/Users/nourhananber/Documents/Wiki.txt"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{localhost}}/api/v1/data/upload/1",
+          "host": [
+            "{{localhost}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "data",
+            "upload",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "process",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    //\"file_id\": \"g7bufpu8xm62_Wiki.txt\",\n    \"chunk_size\": 400,\n    \"overlap_size\": 20,\n    \"do_reset\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{localhost}}/api/v1/data/process/1",
+          "host": [
+            "{{localhost}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "data",
+            "process",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "nlp_index_push",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"do_reset\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{localhost}}/api/v1/nlp/index/push/1",
+          "host": [
+            "{{localhost}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "nlp",
+            "index",
+            "push",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "nlp_index_info",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{localhost}}/api/v1/nlp/index/info/1",
+          "host": [
+            "{{localhost}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "nlp",
+            "index",
+            "info",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "nlp_index_search",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"text\": \"What two breakwaters did most migrants swim around to enter Ceuta during the late July 2026 incident?\",\n    \"limit\": 2\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{localhost}}/api/v1/nlp/index/search/1",
+          "host": [
+            "{{localhost}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "nlp",
+            "index",
+            "search",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "localhost",
+      "value": ""
+    }
+  ]
+}
