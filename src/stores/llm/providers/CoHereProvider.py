@@ -21,6 +21,8 @@ class CoHereProvider(LLMInterface):
         self.embedding_model_id = None
         self.embedding_size = None
 
+        self.enums = CoHereEnum
+
         self.client = cohere.Client(
             api_key = self.api_key
         )

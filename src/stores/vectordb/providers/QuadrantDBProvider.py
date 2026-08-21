@@ -4,6 +4,7 @@ from ..VectorDBEnums import DistanceMethodEnums
 from qdrant_client import models, QdrantClient
 from uuid import uuid4
 import json
+from models.db_schemes import RetrievedDocument
 
 class QuadrantDB(VectorDBInterface):
     def __init__(self, db_path: str, distance_method: str):
@@ -121,11 +122,23 @@ class QuadrantDB(VectorDBInterface):
         return True
 
     def search_by_vector(self, collection_name, vector, limit: int = 5):
-        return self.client.search(
+        
+        results =  self.client.search(
             collection_name=collection_name,
             query_vector=vector,
             limit=limit
         )
+
+        if not results or len(results) == 0:
+            return None
+
+        return [
+           RetrievedDocument(**{
+                "score": result.score,
+                "text": result.payload["text"],
+            })
+            for result in results
+        ]
         
 
 
