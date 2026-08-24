@@ -89,7 +89,7 @@ function TopBar({ title, onOpenNav }) {
 function Workspace({ nav, onOpenNav }) {
   const { workspaces, activeId } = nav
   const { messages, isStreaming, send, stop } = useChat(activeId)
-  const { files, readyCount, addFiles, retry, dismiss } = useFiles(activeId)
+  const { files, readyCount, loading: filesLoading, addFiles, retry, dismiss } = useFiles(activeId)
   const lastQuestionRef = useRef(null)
 
   const active = workspaces.find((w) => w.id === activeId)
@@ -128,6 +128,8 @@ function Workspace({ nav, onOpenNav }) {
         <div className="composer-dock">
           <Composer
             files={files}
+            canAsk={readyCount > 0}
+            filesLoading={filesLoading}
             isStreaming={isStreaming}
             onSend={ask}
             onStop={stop}

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 from typing import Optional
 
 class ProcessRequest(BaseModel):
@@ -6,3 +6,7 @@ class ProcessRequest(BaseModel):
     chunk_size: Optional[int] = 100
     overlap_size: Optional[int] = 20
     do_reset: Optional[int] = 0
+
+
+class CreateProjectRequest(BaseModel):
+    name: constr(strip_whitespace=True, min_length=1)

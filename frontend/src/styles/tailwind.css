@@ -1,0 +1,3 @@
+/* Preflight is disabled in tailwind.config.js; see the comment there. */
+@tailwind components;
+@tailwind utilities;

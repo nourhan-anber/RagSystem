@@ -12,11 +12,13 @@ const nextKey = () => `f-local-${++sequence}`
 export function useFiles(projectId) {
   const [files, setFiles] = useState([])
   const [loadError, setLoadError] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let cancelled = false
     setFiles([])
     setLoadError(null)
+    setLoading(true)
 
     api
       .listFiles(projectId)
@@ -27,6 +29,9 @@ export function useFiles(projectId) {
       })
       .catch((err) => {
         if (!cancelled) setLoadError(err.message)
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
       })
 
     return () => {
@@ -83,5 +88,5 @@ export function useFiles(projectId) {
 
   const readyCount = files.filter((f) => f.status === 'ready').length
 
-  return { files, readyCount, loadError, addFiles, retry, dismiss }
+  return { files, readyCount, loading, loadError, addFiles, retry, dismiss }
 }

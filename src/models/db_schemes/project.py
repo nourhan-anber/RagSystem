@@ -5,6 +5,8 @@ from bson.objectid import ObjectId
 class Project(BaseModel):
     id: Optional[ObjectId] = Field(None, alias="_id")
     project_id: str = Field(..., min_length=1)
+    # project_id must stay alphanumeric, so the human-facing label lives here.
+    project_name: Optional[str] = None
 
     @validator('project_id')
     def validate_project_id(cls, value):

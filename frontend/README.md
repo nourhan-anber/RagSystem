@@ -7,32 +7,48 @@ ask questions, read a streamed answer with its sources.
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173
-npm test           # unit + smoke tests
-npm run build      # production bundle into dist/
+cp .env.example .env   # first time only
+npm run dev            # http://localhost:5173
+npm test               # unit + smoke tests
+npm run build          # production bundle into dist/
 ```
 
-`/api` is proxied to `http://localhost:8000`, so the backend needs no CORS config
-in development.
+## Configuration
+
+All settings live in `.env` and are read by `vite.config.js` via `loadEnv`:
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `VITE_API_URL` | `http://127.0.0.1:8000` | Backend the dev server proxies `/api` to |
+| `VITE_PORT` | `5173` | Port for the dev server itself |
+| `VITE_USE_MOCKS` | `true` | Run against the in-memory double instead of the backend |
+
+Because `/api` is proxied, the browser stays same-origin and the backend needs no
+CORS configuration in development.
+
+Use `127.0.0.1` rather than `localhost` in `VITE_API_URL`. Node resolves `localhost`
+to `::1` (IPv6) first, while uvicorn binds IPv4 only by default, so `localhost` makes
+the proxy fail with `ECONNREFUSED ::1:8000`.
+
+The proxy only exists in the dev server. A production build serves `/api` from
+whatever origin hosts `dist/`.
 
 ## Mock mode
 
-The endpoints this UI calls do not exist in the backend yet:
+`VITE_USE_MOCKS=false` (the default) talks to the real FastAPI backend. Setting it
+to `true` swaps in an in-memory double (`src/api/mockApi.js`) that speaks the same
+contracts, which is useful for working on the UI with no backend running. A
+`mock data` badge appears in the top bar whenever mocks are active.
 
-| Needed by the UI | Status |
+The endpoints the UI depends on:
+
+| Endpoint | Purpose |
 | --- | --- |
-| `GET /api/v1/data/projects` | not built |
-| `POST /api/v1/data/projects` | not built |
-| `GET /api/v1/data/files/{project_id}` | not built |
-| `POST /api/v1/data/ingest/{project_id}` | not built |
-| `POST /api/v1/nlp/answer/{project_id}` (SSE) | not built |
-
-Until they exist, `.env` sets `VITE_USE_MOCKS=true` and the interface runs against an
-in-memory double (`src/api/mockApi.js`) that speaks the same contracts. A `mock data`
-badge appears in the top bar so this is never mistaken for real output.
-
-Set `VITE_USE_MOCKS=false` once the backend endpoints land. No other change is needed —
-`src/api/index.js` is the only place the choice is made.
+| `GET /api/v1/data/projects` | workspace rail |
+| `POST /api/v1/data/projects` | create a workspace |
+| `GET /api/v1/data/files/{project_id}` | file tray |
+| `POST /api/v1/data/ingest/{project_id}` | upload + chunk + embed in one call |
+| `POST /api/v1/nlp/answer/{project_id}` | streamed answer (SSE) |
 
 ## Streaming protocol
 

@@ -15,6 +15,11 @@ class LLMInterface(ABC):
         pass
 
     @abstractmethod
+    def generate_text_stream(self, prompt: str, chat_history: list=None, max_output_tokens: int=None, temperature: float=None):
+        """Yields the generated answer in deltas, for streaming to a client."""
+        pass
+
+    @abstractmethod
     def embed_text(self, text: str, document_type: str=None):
         pass
 

@@ -1,0 +1,13 @@
+# Secrets are supplied at run time via compose env_file, not baked into the image.
+.env
+.env.bak
+
+# Runtime data lives in a volume.
+assets/files/*
+assets/database/*
+!assets/**/.gitkeep
+
+__pycache__/
+*.pyc
+.pytest_cache/
+tests/

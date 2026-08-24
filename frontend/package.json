@@ -20,7 +20,10 @@
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.1",
     "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.5.4",
     "jsdom": "^24.1.1",
+    "postcss": "^8.5.26",
+    "tailwindcss": "^3.4.19",
     "vite": "^5.4.2",
     "vitest": "^2.0.5"
   }

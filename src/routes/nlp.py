@@ -1,6 +1,8 @@
 from fastapi import FastAPI, APIRouter, Depends, UploadFile, status, Request
 from fastapi.responses import JSONResponse
-from routes.schemes.nlp import PushRequest, SearchRequest
+from routes.schemes.nlp import PushRequest, SearchRequest, AnswerRequest
+from routes.sse import sse_frame
+from fastapi.responses import StreamingResponse
 import logging
 from models.ProjectModel import ProjectModel
 from models.ChunkModel import ChunkModel
@@ -210,6 +212,63 @@ async def search_index(request: Request, project_id: str, search_request: Search
             "full_prompt": full_prompt,
             "chat_history": chat_history
         }
-    ) 
+    )
 
-       
+
+@nlp_router.post("/answer/{project_id}")
+async def answer_question(request: Request, project_id: str, answer_request: AnswerRequest):
+    """
+    Streams a RAG answer as Server-Sent Events.
+
+    Retrieval happens first, so the sources frame is sent before the model has
+    produced anything; the answer then arrives token by token. The generator is
+    deliberately synchronous: Starlette runs a sync generator in a threadpool,
+    which keeps the blocking LLM SDK calls off the event loop.
+    """
+    project_model = await ProjectModel.create_instance(
+        db_client=request.app.db_client
+    )
+
+    project = await project_model.get_project_or_create_one(
+        project_id=project_id
+    )
+
+    if not project:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"signal": ResponseSignal.PROJECT_NOT_FOUND_ERROR.value}
+        )
+
+    nlp_controller = NLPController(
+        vectordb_client=request.app.vectordb_client,
+        generation_client=request.app.generation_client,
+        embedding_client=request.app.embedding_client,
+        template_parser=request.app.template_parser
+    )
+
+    history = [turn.dict() for turn in (answer_request.history or [])]
+
+    def event_stream():
+        try:
+            for event in nlp_controller.stream_rag_answer(
+                project=project,
+                query=answer_request.text,
+                limit=answer_request.limit,
+                history=history
+            ):
+                yield sse_frame(event)
+        except Exception as exc:
+            # The response has already begun, so failures are reported in-band
+            # rather than as a status code the client will never see.
+            logger.error(f"Error while answering: {exc}")
+            yield sse_frame({"type": "error", "message": str(exc)})
+
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        }
+    )

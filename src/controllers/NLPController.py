@@ -4,8 +4,15 @@ from models.ChunkModel import DataChunk
 from stores.llm.LLMEnums import DocumentTypoEnum
 from typing import List
 import json
+import logging
 
 class NLPController(BaseController):
+
+    # Answering with no retrieved passages would invite the model to invent one.
+    NO_DOCUMENTS_MESSAGE = (
+        "No documents in this workspace matched your question, so there is "
+        "nothing to answer from yet. Upload a document and try again."
+    )
     
     def __init__(self, 
                  vectordb_client,
@@ -18,6 +25,7 @@ class NLPController(BaseController):
         self.generation_client = generation_client
         self.embedding_client = embedding_client
         self.template_parser = template_parser
+        self.logger = logging.getLogger(__name__)
 
     def create_collection_name(self, project_id: str):
         return f"collection_{project_id}".strip()
@@ -97,48 +105,118 @@ class NLPController(BaseController):
         
         return results
 
-    def answer_rag_question(self,
-                            project: Project,
-                            query: str,
-                            limit: int = 20
-                            ):
+    def build_rag_prompt(self, project: Project, query: str,
+                         limit: int = 5, history: list = None):
+        """
+        Retrieves the passages relevant to a question and assembles the prompt.
+
+        Kept separate from generation so both the streaming and non-streaming
+        answer paths share one definition of what the model is asked, and so it
+        can be exercised without calling an LLM.
+
+        Returns (chat_history, full_prompt, sources). When nothing is retrieved,
+        the prompt is None and sources is empty.
+        """
         retrieved_documents = self.search_vector_db_collection(
             project=project,
             text=query,
-            limit=limit)
+            limit=limit
+        )
 
-        if not retrieved_documents or len(retrieved_documents) == 0:
-            return answer, full_prompt, chat_history
+        if not retrieved_documents:
+            return None, None, []
 
-        system_prompt = self.template_parser.get("rag", "system_prompt")
+        sources = [
+            {"text": doc.text, "score": doc.score}
+            for doc in retrieved_documents
+        ]
 
         documents_prompt = "\n".join([
-            self.template_parser.get("rag", "document_prompt",{
-                                "doc_num": idx + 1,
-                                "chunk_text": doc.text,
-                            })
+            self.template_parser.get("rag", "document_prompt", {
+                "doc_num": idx + 1,
+                "chunk_text": doc.text,
+            })
             for idx, doc in enumerate(retrieved_documents)
         ])
 
         footer_prompt = self.template_parser.get("rag", "footer_prompt", {
-                                "query": query,
-                            })
+            "query": query,
+        })
 
         chat_history = [
             self.generation_client.construct_prompt(
-                prompt= system_prompt,
-                role= self.generation_client.enums.SYSTEM.value
+                prompt=self.template_parser.get("rag", "system_prompt"),
+                role=self.generation_client.enums.SYSTEM.value
             )
         ]
 
+        # Earlier turns let follow-up questions ("why?") resolve against context.
+        for turn in history or []:
+            role = (
+                self.generation_client.enums.ASSISTANT.value
+                if turn.get("role") == "assistant"
+                else self.generation_client.enums.USER.value
+            )
+            chat_history.append(
+                self.generation_client.construct_prompt(prompt=turn.get("text", ""), role=role)
+            )
+
         full_prompt = "\n\n".join([documents_prompt, footer_prompt])
 
+        return chat_history, full_prompt, sources
+
+    def answer_rag_question(self, project: Project, query: str,
+                            limit: int = 20, history: list = None):
+        chat_history, full_prompt, _ = self.build_rag_prompt(
+            project=project, query=query, limit=limit, history=history
+        )
+
+        # Nothing retrieved: report it rather than referencing names that were
+        # never bound, which previously turned an empty index into a 500.
+        if full_prompt is None:
+            return None, None, None
+
         answer = self.generation_client.generate_text(
-            prompt= full_prompt,
+            prompt=full_prompt,
             chat_history=chat_history
         )
 
         return answer, full_prompt, chat_history
-        
-        
 
+    def stream_rag_answer(self, project: Project, query: str,
+                          limit: int = 5, history: list = None):
+        """
+        Yields the answer as protocol events for the UI:
+
+            {"type": "sources", "value": [...]}   retrieved passages, sent first
+            {"type": "token",   "value": "..."}   one delta of the answer
+            {"type": "done"}                      generation finished
+            {"type": "error",   "message": "..."} generation failed
+
+        The route serialises these as SSE frames; keeping them as plain dicts
+        means the whole answer path is testable without HTTP or an LLM.
+        """
+        chat_history, full_prompt, sources = self.build_rag_prompt(
+            project=project, query=query, limit=limit, history=history
+        )
+
+        yield {"type": "sources", "value": sources}
+
+        if full_prompt is None:
+            yield {"type": "token", "value": self.NO_DOCUMENTS_MESSAGE}
+            yield {"type": "done"}
+            return
+
+        try:
+            for delta in self.generation_client.generate_text_stream(
+                prompt=full_prompt,
+                chat_history=chat_history
+            ):
+                if delta:
+                    yield {"type": "token", "value": delta}
+        except Exception as exc:
+            self.logger.error("Error while streaming the answer: %s", exc)
+            yield {"type": "error", "message": str(exc)}
+            return
+
+        yield {"type": "done"}

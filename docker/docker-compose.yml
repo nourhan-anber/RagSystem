@@ -1,26 +1,82 @@
 services:
   mongodb:
     image: mongo:7-jammy
-    
-    container_name: mongodb
-    
+    container_name: mini-rag-mongodb
+
     ports:
       - "27007:27017"
-    
+
     volumes:
       - mongodata:/data/db
 
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
-    
+
+    # The backend waits on this rather than crashing on the first query.
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
     networks:
+      - mini-rag
+
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ../src
+    container_name: mini-rag-backend
+
+    # API keys and model settings come from the same file the local setup uses.
+    env_file:
+      - ../src/.env
+
+    environment:
+      # Overrides the host-oriented value in .env: inside the network MongoDB is
+      # reachable by service name on its container port, not localhost:27007.
+      - MONGODB_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      # Uploaded files and the embedded Qdrant store. A named volume rather than
+      # a bind mount: Qdrant's embedded store keeps a lock and a SQLite file,
+      # which do not behave reliably on a bind-mounted host directory.
+      - backend-assets:/app/assets
+
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+    networks:
+      - mini-rag
+
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ../frontend
+    container_name: mini-rag-frontend
+
+    ports:
+      - "8080:80"
+
+    depends_on:
       - backend
-    
-    restart: always
+
+    networks:
+      - mini-rag
+
+    restart: unless-stopped
 
 networks:
-  backend:
+  mini-rag:
 
 volumes:
   mongodata:
+  backend-assets:

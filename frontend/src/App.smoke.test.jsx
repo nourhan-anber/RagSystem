@@ -33,7 +33,13 @@ describe('App', () => {
     await screen.findByRole('button', { name: 'Wiki notes' })
     expect(container.querySelector('.sidebar')).not.toHaveClass('sidebar--open')
 
-    fireEvent.click(screen.getByLabelText('Open menu'))
+    const menu = screen.getByLabelText('Open menu')
+    // .topbar__menu is display:none above 720px and inline-flex below it, so
+    // this class is the whole of "mobile only". jsdom cannot evaluate the
+    // media query, but losing the class would expose the button on desktop.
+    expect(menu).toHaveClass('topbar__menu')
+
+    fireEvent.click(menu)
     expect(container.querySelector('.sidebar')).toHaveClass('sidebar--open')
 
     fireEvent.click(screen.getByLabelText('Close menu'))

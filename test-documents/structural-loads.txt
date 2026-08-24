@@ -1,0 +1,78 @@
+FICTIONAL SAMPLE DOCUMENT - for testing retrieval only. Not a real building code.
+
+KESTREL COUNTY BUILDING CODE (KCBC)
+Part 3 - Structural Design Loads
+Revision 4.2, adopted 11 February 2029
+
+3.1 SCOPE
+
+This Part sets out the minimum design loads for buildings within Kestrel County.
+Where a structure falls under Part 12 (Heritage Structures), the provisions of
+Part 12 take precedence over this Part.
+
+3.2 MINIMUM UNIFORMLY DISTRIBUTED LIVE LOADS
+
+Clause 3.2.1. Floors shall be designed for not less than the following uniformly
+distributed live loads:
+
+  Residential dwelling units          1.9 kN/m2
+  Office areas above the first floor  2.7 kN/m2
+  Office areas at grade               4.1 kN/m2
+  Assembly areas with fixed seating   3.6 kN/m2
+  Assembly areas without seating      4.8 kN/m2
+  Light storage                       6.2 kN/m2
+  Heavy storage                       12.0 kN/m2
+  Stair treads and landings           4.8 kN/m2
+  Vehicle parking, passenger only     2.4 kN/m2
+
+Clause 3.2.2. Live loads on office floors may be reduced by 0.5 percent per square
+metre of tributary area, to a maximum reduction of 40 percent. No reduction is
+permitted for assembly areas or storage areas.
+
+3.3 SNOW LOADS
+
+Clause 3.3.1. The basic ground snow load for sites below 400 metres elevation is
+1.4 kN/m2. For sites at or above 400 metres, the basic ground snow load is
+2.6 kN/m2.
+
+Clause 3.3.2. Roofs with a slope exceeding 30 degrees may apply a slope reduction
+factor of 0.75. Roofs with a slope exceeding 60 degrees need not be designed for
+snow accumulation, except at valleys and parapets.
+
+Clause 3.3.3. Drift loading shall be considered wherever a roof abuts a wall
+taller than 1.2 metres.
+
+3.4 WIND LOADS
+
+Clause 3.4.1. The basic wind speed for Kestrel County is 42 metres per second,
+measured as a three-second gust at 10 metres above grade in open terrain.
+
+Clause 3.4.2. Exposure categories are assigned as follows. Exposure B applies to
+urban and suburban areas with numerous closely spaced obstructions. Exposure C
+applies to open terrain with scattered obstructions under 9 metres in height.
+Exposure D applies to flat unobstructed areas within 1.5 kilometres of a large
+body of water.
+
+Clause 3.4.3. Buildings taller than 60 metres, or with a height to least width
+ratio greater than 5, shall be assessed by wind tunnel testing.
+
+3.5 SEISMIC DESIGN
+
+Clause 3.5.1. Kestrel County is assigned Seismic Design Category C. The importance
+factor for standard occupancy buildings is 1.0, for essential facilities 1.5, and
+for hazardous material facilities 1.25.
+
+Clause 3.5.2. Structures exceeding 20 metres in height shall use dynamic analysis
+rather than the equivalent static force method.
+
+3.6 DEFLECTION LIMITS
+
+Clause 3.6.1. Deflection under live load alone shall not exceed span divided by
+360. Deflection under combined dead and live load shall not exceed span divided
+by 240.
+
+Clause 3.6.2. For members supporting brittle finishes, deflection under live load
+shall not exceed span divided by 480.
+
+Clause 3.6.3. Lateral drift between adjacent storeys shall not exceed 0.4 percent
+of the storey height under service level wind loading.

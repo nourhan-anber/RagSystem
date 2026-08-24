@@ -1,0 +1,88 @@
+FICTIONAL SAMPLE DOCUMENT - for testing retrieval only. Not a real building code.
+
+KESTREL COUNTY BUILDING CODE (KCBC)
+Part 7 - Accessibility
+Revision 4.2, adopted 11 February 2029
+
+7.1 SCOPE
+
+This Part applies to all new construction and to alterations affecting more than
+50 percent of the floor area of an existing storey. Buildings under Part 12
+(Heritage Structures) may apply to the Building Official for partial relief.
+
+7.2 ACCESSIBLE ROUTES
+
+Clause 7.2.1. An accessible route shall have a clear width of not less than
+1,200 millimetres, except that it may narrow to 900 millimetres for a length not
+exceeding 600 millimetres at a single point.
+
+Clause 7.2.2. Where an accessible route requires a 180 degree turn around an
+obstruction, the clear width shall be not less than 1,500 millimetres.
+
+Clause 7.2.3. A turning space shall be provided at intervals not exceeding
+60 metres along an accessible route. A turning space is a circle of not less than
+1,500 millimetres diameter, or a T-shaped space within a 1,500 millimetre square.
+
+7.3 DOORS AND DOORWAYS
+
+Clause 7.3.1. Doorways on an accessible route shall provide a clear opening width
+of not less than 850 millimetres, measured with the door open 90 degrees.
+
+Clause 7.3.2. The maximum force required to open an interior door shall not
+exceed 22 newtons. For exterior doors the maximum is 38 newtons.
+
+Clause 7.3.3. Door hardware shall be operable with one hand without tight
+grasping, pinching, or twisting of the wrist, and shall be mounted between
+900 and 1,200 millimetres above the finished floor.
+
+Clause 7.3.4. Where a door opens onto an accessible route, manoeuvring clearance
+of not less than 450 millimetres shall be provided on the latch side.
+
+7.4 RAMPS
+
+Clause 7.4.1. The running slope of a ramp shall not exceed 1 in 12. The cross
+slope shall not exceed 1 in 50.
+
+Clause 7.4.2. The maximum rise of a single ramp run is 760 millimetres. A level
+landing not less than 1,500 millimetres long shall be provided at the top and
+bottom of each run.
+
+Clause 7.4.3. Ramps rising more than 150 millimetres shall have handrails on both
+sides, mounted between 865 and 965 millimetres above the ramp surface.
+
+Clause 7.4.4. Edge protection of not less than 100 millimetres in height is
+required along both sides of a ramp run.
+
+7.5 SANITARY FACILITIES
+
+Clause 7.5.1. Grab bars shall be mounted between 750 and 850 millimetres above
+the finished floor.
+
+Clause 7.5.2. The clear floor space at an accessible water closet shall be not
+less than 1,500 millimetres by 1,500 millimetres.
+
+Clause 7.5.3. The rim of an accessible lavatory shall be not more than
+865 millimetres above the finished floor, with knee clearance of not less than
+685 millimetres.
+
+7.6 PARKING
+
+Clause 7.6.1. Accessible parking spaces shall be provided at the rate of one
+space for every 25 parking spaces for the first 100 spaces, then one space for
+every 50 spaces thereafter.
+
+Clause 7.6.2. An accessible parking space shall be not less than 2,700
+millimetres wide with an adjacent access aisle not less than 1,500 millimetres
+wide. Van accessible spaces require an access aisle of not less than 2,400
+millimetres.
+
+Clause 7.6.3. Accessible parking shall be located on the shortest accessible
+route to the accessible entrance, and in no case more than 45 metres from it.
+
+7.7 SIGNAGE AND ALARMS
+
+Clause 7.7.1. Tactile characters on signage shall be raised not less than
+0.8 millimetres and shall be between 16 and 50 millimetres in height.
+
+Clause 7.7.2. Visual alarm appliances shall be provided in every public corridor,
+toilet room, and assembly space, synchronised at a flash rate of 1 hertz.

@@ -1,0 +1,90 @@
+FICTIONAL SAMPLE DOCUMENT - for testing retrieval only. Not a real building code.
+
+KESTREL COUNTY BUILDING CODE (KCBC)
+Part 5 - Fire Protection and Means of Egress
+Revision 4.2, adopted 11 February 2029
+
+5.1 SCOPE
+
+This Part governs fire resistance construction, detection and suppression systems,
+and means of egress. Where this Part conflicts with Part 7 (Accessibility), the
+more restrictive requirement applies, except that accessible route widths under
+Part 7 shall never be reduced.
+
+5.2 OCCUPANT LOAD
+
+Clause 5.2.1. Occupant load shall be calculated using the following floor area
+allowances per person:
+
+  Assembly, standing space         0.6 m2 per person
+  Assembly, tables and chairs      1.4 m2 per person
+  Business and office              9.3 m2 per person
+  Educational classrooms           1.9 m2 per person
+  Mercantile, ground floor         5.6 m2 per person
+  Storage and warehouse           46.0 m2 per person
+  Residential dwelling            18.6 m2 per person
+
+Clause 5.2.2. Where a space serves more than one function, the occupant load shall
+be the sum of the loads for each function calculated separately.
+
+5.3 TRAVEL DISTANCE
+
+Clause 5.3.1. The maximum travel distance from any point in a storey to the
+nearest exit shall not exceed 45 metres in a building protected throughout by an
+automatic sprinkler system, or 30 metres in a building without such protection.
+
+Clause 5.3.2. In storage occupancies the maximum travel distance is 60 metres
+where sprinklered and 38 metres where unsprinklered.
+
+Clause 5.3.3. Dead end corridors shall not exceed 6 metres in length.
+
+5.4 EXIT CAPACITY AND WIDTH
+
+Clause 5.4.1. Egress capacity shall be provided at 5.1 millimetres of width per
+occupant for stairways, and 3.8 millimetres per occupant for level egress
+components including corridors and doorways.
+
+Clause 5.4.2. The minimum clear width of an exit corridor is 1,120 millimetres.
+The minimum clear width of an exit stairway is 1,120 millimetres.
+
+Clause 5.4.3. Fire door assemblies in an exit enclosure shall have a minimum leaf
+width of 900 millimetres.
+
+Clause 5.4.4. Every storey with an occupant load exceeding 49 persons shall have
+not fewer than two exits. Every storey with an occupant load exceeding 500 persons
+shall have not fewer than three exits.
+
+5.5 FIRE RESISTANCE RATINGS
+
+Clause 5.5.1. Exit stair enclosures shall have a fire resistance rating of not
+less than 2 hours where the enclosure connects four or more storeys, and not less
+than 1 hour where it connects fewer than four storeys.
+
+Clause 5.5.2. Fire doors within a 2 hour rated enclosure shall carry a 90 minute
+rating. Fire doors within a 1 hour rated enclosure shall carry a 60 minute rating.
+
+Clause 5.5.3. Shaft enclosures for elevators shall have a fire resistance rating
+of not less than 2 hours.
+
+Clause 5.5.4. Separation between dwelling units shall have a fire resistance
+rating of not less than 1 hour, increased to 90 minutes where the building exceeds
+six storeys.
+
+5.6 AUTOMATIC SPRINKLER SYSTEMS
+
+Clause 5.6.1. An automatic sprinkler system is required throughout any building
+that exceeds 1,200 square metres in aggregate floor area, or that exceeds three
+storeys in height, or that contains an assembly occupancy with an occupant load
+exceeding 300 persons.
+
+Clause 5.6.2. Sprinkler water supply shall be sized for a duration of not less
+than 60 minutes for light hazard occupancies and 90 minutes for ordinary hazard
+occupancies.
+
+5.7 FIRE ALARM AND DETECTION
+
+Clause 5.7.1. A manual fire alarm system is required in buildings exceeding two
+storeys or with an occupant load exceeding 100 persons.
+
+Clause 5.7.2. Smoke detection is required in every corridor serving sleeping
+rooms, at intervals not exceeding 9 metres.

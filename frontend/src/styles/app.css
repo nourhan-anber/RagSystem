@@ -110,10 +110,13 @@ button {
   display: none;
 }
 
-/* Drawer-only affordances, switched on inside the narrow-viewport block. */
-.sidebar__dismiss,
-.scrim,
-.topbar__menu {
+/* Drawer-only affordances, switched on inside the narrow-viewport block.
+   Qualified by their parent on purpose: these buttons also carry .icon-button,
+   which sets display too, so an unqualified single-class selector here loses
+   the cascade to whichever rule happens to come later in the file. */
+.topbar .topbar__menu,
+.sidebar .sidebar__dismiss,
+.scrim {
   display: none;
 }
 
@@ -619,6 +622,38 @@ button {
   color: var(--text-muted);
 }
 
+/* Shown in place of the question field until a document is indexed. */
+.composer__upload {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.upload-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  color: var(--text);
+  font-size: 15px;
+  transition: filter 0.15s ease;
+}
+
+.upload-button:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+.upload-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 .composer__note {
   margin: 10px 0 0;
   text-align: center;
@@ -694,8 +729,8 @@ button {
     display: none;
   }
 
-  .sidebar__dismiss,
-  .topbar__menu {
+  .sidebar .sidebar__dismiss,
+  .topbar .topbar__menu {
     display: inline-flex;
   }
 
